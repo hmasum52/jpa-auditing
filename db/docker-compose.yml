@@ -1,0 +1,23 @@
+name: jpa_auditing
+
+services:
+  postgres:
+    container_name: jpa_auditing_postgres
+    image: postgres:alpine
+    ports:
+      - "5435:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=audit_db
+    volumes:
+      - ${VOLUME_PATH:-postgres-data}:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes: 
+  postgres-data:
