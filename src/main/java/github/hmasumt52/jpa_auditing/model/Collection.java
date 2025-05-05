@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Audited
+@Audited(withModifiedFlag = true)
 public class Collection {
 
     @Id

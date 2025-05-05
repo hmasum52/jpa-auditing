@@ -18,11 +18,13 @@ import org.springframework.web.bind.annotation.RestController;
 import github.hmasumt52.jpa_auditing.dto.CollectionDto;
 import github.hmasumt52.jpa_auditing.model.Collection;
 import github.hmasumt52.jpa_auditing.service.CollectionService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/collections")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "User-Id")
 public class CollectionController {
 
     private final CollectionService collectionService;

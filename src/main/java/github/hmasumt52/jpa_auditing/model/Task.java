@@ -21,7 +21,7 @@ import jakarta.persistence.Column;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Audited
+@Audited(withModifiedFlag = true)
 public class Task {
 
     @Id

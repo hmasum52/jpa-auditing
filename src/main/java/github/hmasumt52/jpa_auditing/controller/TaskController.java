@@ -17,11 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 import github.hmasumt52.jpa_auditing.dto.TaskDto;
 import github.hmasumt52.jpa_auditing.model.Task;
 import github.hmasumt52.jpa_auditing.service.TaskService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/tasks")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "User-Id")
 public class TaskController {
 
     private final TaskService taskService;
