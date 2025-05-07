@@ -3,18 +3,24 @@ package github.hmasumt52.jpa_auditing.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.hibernate.envers.AuditReader;
+import org.hibernate.envers.AuditReaderFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import github.hmasumt52.jpa_auditing.dto.CollectionDto;
 import github.hmasumt52.jpa_auditing.model.Collection;
 import github.hmasumt52.jpa_auditing.repository.CollectionRepository;
+import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class CollectionService {
+
+    private final EntityManagerFactory factory;
+
 
     private final CollectionRepository collectionRepository;
 
@@ -44,5 +50,12 @@ public class CollectionService {
 
     public void deleteCollection(Long id) {
         collectionRepository.deleteById(id);
+    }
+
+    public List getAuditLog() {
+        AuditReader auditReader = AuditReaderFactory.get(factory.createEntityManager());
+        return auditReader.createQuery()
+                .forRevisionsOfEntity(Collection.class, true, true)
+                .getResultList();
     }
 }

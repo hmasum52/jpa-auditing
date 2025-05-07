@@ -69,4 +69,10 @@ public class CollectionController {
         collectionService.deleteCollection(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @GetMapping("/audit")
+    public ResponseEntity<List> getAuditLog() {
+        List auditLog = collectionService.getAuditLog();
+        return new ResponseEntity<>(auditLog, HttpStatus.OK);
+    }
 }
