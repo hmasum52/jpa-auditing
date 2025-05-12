@@ -25,7 +25,7 @@ INSERT INTO task (collection_id, name, description, status) VALUES
 
 -- audit tables
 create table revinfo (
-    id integer not null,
+    id bigint not null,
     modifer varchar(255),
     timestamp timestamp,
     primary key (id)
@@ -34,7 +34,7 @@ create table revinfo (
 
 create table collection_aud (
     id bigint not null,
-    rev integer not null,
+    rev bigint not null references revinfo(id),
     revtype smallint,
     description text,
     description_mod boolean,
@@ -46,7 +46,7 @@ create table collection_aud (
 
 create table task_aud (
     id bigint not null,
-    rev integer not null,
+    rev bigint not null references revinfo(id),
     revtype smallint,
     description text,
     description_mod boolean,
@@ -59,14 +59,14 @@ create table task_aud (
     primary key (rev, id)
 );
 
-create sequence revinfo_seq start with 1 increment by 50;
+--create sequence revinfo_seq start with 1 increment by 1;
 
-alter table if exists collection_aud 
-    add constraint FKi85irm542lohmbe1scaoacfad 
-    foreign key (rev) 
-    references revinfo;
+-- alter table if exists collection_aud 
+--     add constraint FKi85irm542lohmbe1scaoacfad 
+--     foreign key (rev) 
+--     references revinfo;
 
-alter table if exists task_aud 
-    add constraint FKaerb34sjraiw4vjh4oh46rb71 
-    foreign key (rev) 
-    references revinfo;
+-- alter table if exists task_aud 
+--     add constraint FKaerb34sjraiw4vjh4oh46rb71 
+--     foreign key (rev) 
+--     references revinfo;

@@ -28,22 +28,29 @@ public class TaskService {
         return taskRepository.save(taskDTO.toEntity(collection));      
     }
 
-    public List<Task> getAllTasks() {
-        return taskRepository.findAll();
+    public List<TaskDto.Response> getAllTasks() {
+        return taskRepository.findAll().stream()
+            .map(TaskDto.Response::fromEntity)
+            .toList();
     }
     
-    public List<Task> getTasksByCollectionId(Long collectionId) {
+    public List<TaskDto.Response> getTasksByCollectionId(Long collectionId) {
         if (!collectionRepository.existsById(collectionId)) {
             throw new RuntimeException("Collection not found");
         }
-        return taskRepository.findByCollectionId(collectionId);
+        return taskRepository.findByCollectionId(collectionId)
+            .stream()
+            .map(TaskDto.Response::fromEntity)
+            .toList();
     }
 
-    public Optional<Task> getTaskById(Long id) {
-        return taskRepository.findById(id);
+    public TaskDto.Response getTaskById(Long id) {
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Task not found"));
+       return TaskDto.Response.fromEntityWithCollection(task);
     }
 
-    public Task updateTask(Long id, TaskDto.Request taskDTO) {
+    public TaskDto.Response updateTask(Long id, TaskDto.Request taskDTO) {
         if(!taskRepository.existsById(id)) {
             throw new RuntimeException("Task not found");
         }
@@ -54,7 +61,7 @@ public class TaskService {
         Task task = taskDTO.toEntity(collection);
         task.setId(id);
         
-        return taskRepository.save(task);
+        return TaskDto.Response.fromEntity(taskRepository.save(task));
     }
 
     public void deleteTask(Long id) {

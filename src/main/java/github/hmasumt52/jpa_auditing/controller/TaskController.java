@@ -1,7 +1,6 @@
 package github.hmasumt52.jpa_auditing.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,43 +35,26 @@ public class TaskController {
 
     @GetMapping
     public ResponseEntity<List<TaskDto.Response>> getAllTasks() {
-        List<TaskDto.Response> tasks = taskService.getAllTasks().stream()
-            .map(TaskDto.Response::fromEntity)
-            .toList();
-        return new ResponseEntity<>(tasks, HttpStatus.OK);
+        return new ResponseEntity<>(taskService.getAllTasks(), HttpStatus.OK);
     }
     
     @GetMapping("/collection/{collectionId}")
-    public ResponseEntity<List<TaskDto.Response>> getTasksByCollectionId(@PathVariable Long collectionId) {
-        try {
-            List<TaskDto.Response> tasks = taskService.getTasksByCollectionId(collectionId).stream()
-                .map(TaskDto.Response::fromEntity)
-                .toList();
-            return new ResponseEntity<>(tasks, HttpStatus.OK);
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<List<TaskDto.Response>> getTasksByCollectionId(@PathVariable(name = "collectionId") Long collectionId) {
+        return new ResponseEntity<>(taskService.getTasksByCollectionId(collectionId), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TaskDto.Response> getTaskById(@PathVariable Long id) {
-        Optional<Task> task = taskService.getTaskById(id);
-        return task.map(value -> new ResponseEntity<>(TaskDto.Response.fromEntity(value), HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    public ResponseEntity<TaskDto.Response> getTaskById(@PathVariable(name = "id") Long id) {
+        return new ResponseEntity<>(taskService.getTaskById(id), HttpStatus.OK);   
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TaskDto.Response> updateTask(@PathVariable Long id, @RequestBody TaskDto.Request taskDTO) {
-        try {
-            Task updatedTask = taskService.updateTask(id, taskDTO);
-            return new ResponseEntity<>(TaskDto.Response.fromEntity(updatedTask), HttpStatus.OK);
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<TaskDto.Response> updateTask(@PathVariable(name = "id") Long id, @RequestBody TaskDto.Request taskDTO) {
+        return new ResponseEntity<>(taskService.updateTask(id, taskDTO), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteTask(@PathVariable(name = "id") Long id) {
         taskService.deleteTask(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

@@ -2,7 +2,6 @@ package github.hmasumt52.jpa_auditing.model;
 
 import java.io.Serializable;
 import java.time.Instant;
-import java.util.Date;
 
 import org.hibernate.envers.RevisionEntity;
 import org.hibernate.envers.RevisionNumber;
@@ -26,7 +25,7 @@ public class JPARevision implements Serializable {
 	@Id
 	@GeneratedValue
 	@RevisionNumber
-	private int id;
+	private Long id;
 
   @RevisionTimestamp
   private Instant timestamp;

@@ -44,7 +44,7 @@ public class CollectionController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CollectionDto.Response> getCollectionById(@PathVariable Long id) {
+    public ResponseEntity<CollectionDto.Response> getCollectionById(@PathVariable(name = "id") Long id) {
         Optional<Collection> collection = collectionService.getCollectionById(id);
         return collection.map(value -> new ResponseEntity<>(
                 CollectionDto.Response.fromEntity(value), 
@@ -53,7 +53,7 @@ public class CollectionController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CollectionDto.Response> updateCollection(@PathVariable Long id, @RequestBody CollectionDto.Request collectionDTO) {
+    public ResponseEntity<CollectionDto.Response> updateCollection(@PathVariable(name = "id") Long id, @RequestBody CollectionDto.Request collectionDTO) {
         try {
             Collection updatedCollection = collectionService.updateCollection(id, collectionDTO);
             return new ResponseEntity<>(
@@ -65,7 +65,7 @@ public class CollectionController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCollection(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteCollection(@PathVariable(name = "id") Long id) {
         collectionService.deleteCollection(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

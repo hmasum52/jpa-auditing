@@ -4,6 +4,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import github.hmasumt52.jpa_auditing.model.Collection;
 import github.hmasumt52.jpa_auditing.model.Task;
 
@@ -19,15 +21,21 @@ public class TaskDto {
         }
     }
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     public static record Response(
             Long id,
             String name,
             String description,
             String status,
-            Long collectionId
+            Long collectionId,
+            CollectionDto.Response collection
     ) {
         public static Response fromEntity(Task entity) {
             return TaskMapper.INSTANCE.fromEntity(entity);
+        }
+
+        public static Response fromEntityWithCollection(Task entity) {
+            return TaskMapper.INSTANCE.fromEntityWithCollection(entity);
         }
     }
 
@@ -42,6 +50,10 @@ public class TaskDto {
         @Mapping(target = "status", source = "dto.status")
         Task toEntity(Request dto, Collection collection);
 
+        @Mapping(target = "collectionId", ignore = true)
+        Response fromEntityWithCollection(Task entity);
+
+        @Mapping(target = "collection", ignore = true)
         @Mapping(target = "collectionId", source = "collection.id")
         Response fromEntity(Task entity);
     }
